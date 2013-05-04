@@ -41,17 +41,21 @@
                     async: false,
                     cache: false,
                     success: function(obj) {
-                       //alert(JSON.stringify(obj, null, 4));
-                       //alert(obj[0].user.email);
-                       //alert(nUrl);
-                       var nEmail = obj[0].user.email;
+                       var i=0;
+                       for (var user in obj){
+                            var nEmail = obj[i].user.email;
+                            var nUsername = obj[i].user.first_name;
                 
-                       if ($('#email').val()==nEmail){
-                            alert("Login Success!");
-                            openUrl();
-                       
-                       }else{
-                            alert("Invalid user!");
+                            if ($('#email').val()==nEmail && $('#username').val()==nUsername){
+                                alert("Login Success!");
+                                openUrl();
+                                break;
+                            }else{
+                                i++;
+                            }
+                       }
+                       if ($('#email').val()!=nEmail && $('#username').val()!=nUsername){
+                            alert("Invalid User!");
                        }
                     }
                 });
@@ -75,8 +79,8 @@
             function openUrl(){
                 window.location="http://www.cloudwalk.io/";
             }
-            </script>
-
+        </script>
+            
     </head>
     
     <body>
@@ -87,15 +91,15 @@
         <div class="container">
             <form id="loginForm" method="post" onsubmit="javascript:loginManager()">
                 <div class="control-group">
-                    <label class="control-label" for="email">Email:</label>
+                    <label class="control-label" for="username">Username:</label>
                     <div class="controls">
-                        <input type="text" id="email" placeholder="Email">
+                        <input type="text" id="username" placeholder="Username">
                     </div>
                 </div>
                 <div class="control-group">
-                    <label class="control-label" for="password">Password:</label>
+                    <label class="control-label" for="email">Email:</label>
                     <div class="controls">
-                        <input type="password" id="password" placeholder="Password">
+                        <input type="text" id="email" placeholder="Email">
                     </div>
                 </div>
                 <div class="control-group">
