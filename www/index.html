@@ -28,54 +28,92 @@
         <link href="css/bootstrap-responsive.css" rel="stylesheet">
         <link href="css/docs.css" rel="stylesheet">
         <link href="js/google-code-prettify/prettify.css" rel="stylesheet">
+        <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
         
         <script>
-            function login()
-            {
-                var form = document.createElement('form');
-                form.action = 'http://177.194.34.210:8080/Teste/resources/mine';
-                form.method = 'post';
-                var user = document.createElement('input');
-                user.type = 'hidden';
-                user.name = 'user';
-                user.value = 'admin';
-                form.appendChild(user);
-                form.submit();
+            function loginManager() {
+                var nLink = "http://manager.cloudwalk.io/api/users.json?access_token=";
+                var nUrl = nLink.concat($('#apiToken').val());
+     
+                $.ajax({
+                    url: nUrl,
+                    type: 'GET',
+                    async: false,
+                    cache: false,
+                    success: function(obj) {
+                       //alert(JSON.stringify(obj, null, 4));
+                       //alert(obj[0].user.email);
+                       //alert(nUrl);
+                       var nEmail = obj[0].user.email;
+                
+                       if ($('#email').val()==nEmail){
+                            alert("Login Success!");
+                            openUrl();
+                       
+                       }else{
+                            alert("Invalid user!");
+                       }
+                    }
+                });
             }
         </script>
-    </head>
-                                            
+           
+        <script type="text/javascript">
+            $(document).ready(function(){
+                var apiToken = new XMLHttpRequest();
+                apiToken.open("GET", "APIToken", true);
+                apiToken.onreadystatechange = function() {
+                    if (apiToken.readyState === 4) {
+                        document.getElementById("apiToken").value = apiToken.responseText;
+                    }
+                }
+                apiToken.send(null);
+            });
+        </script>
+            
+        <script type="text/javascript">
+            function openUrl(){
+                window.location="http://www.cloudwalk.io/";
+            }
+            </script>
+
     </head>
     
-    <body onload="init()">
-        <div id="loginPage" data-role="page">
-            
-        <div data-role="header">
+    <body>
+        <div class="page-header">
             <h1>CloudWALK</h1>
         </div>
-            
-        <div data-role="content">
-            <form id="loginForm">
-                <div data-role="fieldcontain" class="ui-hide-label">
-                    <label for="username">Username:</label>
-                    <input type="text" name="username" id="username" value="" placeholder="Username" />
+        
+        <div class="container">
+            <form id="loginForm" method="post" onsubmit="javascript:loginManager()">
+                <div class="control-group">
+                    <label class="control-label" for="email">Email:</label>
+                    <div class="controls">
+                        <input type="text" id="email" placeholder="Email">
+                    </div>
                 </div>
-                    
-                <div data-role="fieldcontain" class="ui-hide-label">
-                    <label for="password">Password:</label>
-                    <input type="password" name="password" id="password" value="" placeholder="Password"/>
+                <div class="control-group">
+                    <label class="control-label" for="password">Password:</label>
+                    <div class="controls">
+                        <input type="password" id="password" placeholder="Password">
+                    </div>
                 </div>
-                    
-                <!--<input type="submit" value="Login" id="submitButton"/>-->
-                    
-                <button type="button" id="login" onclick="login()">Login</button>
-            </form> 
-        </div>
-            
-        <div data-role="footer">
-            <h4>&copy; Plano Bê</h4>
-            </div>
+                <div class="control-group">
+                    <label class="control-label" for="password">API Token:</label>
+                    <div class="controls">
+                        <input class="input-xlarge" id="apiToken" type="text" placeholder="API Token">
+                    </div>        
+                </div>
+                <div class="control-group">
+                    <div class="controls">
+                        <button type="submit" class="btn btn-large btn-primary">Sign in</button>
+                    </div>
+                </div>
+            </form>
         </div>
         
+        <footer class="footer">
+            <h4>&copy; Plano Bê</h4>
+        </footer>
     </body>
 </html>
